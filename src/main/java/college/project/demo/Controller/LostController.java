@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -36,9 +37,12 @@ public class LostController {
         return lost;
     }
 
-    @GetMapping("/api/lostitems/{id}")
-    public List<LostItem> getItems(@PathVariable Long id){
-        return lostrepo.findById(id);
+    @GetMapping("/api/lostitems")
+    public List<LostItem> getItems(Principal prince){
+        String name= prince.getName();
+        Users user= repo.findByEmail(name);
+        System.out.println(user.getEmail());
+        return lostrepo.findByUser(user);
     }
 
     @DeleteMapping("/api/deletelostitem/{id}")
