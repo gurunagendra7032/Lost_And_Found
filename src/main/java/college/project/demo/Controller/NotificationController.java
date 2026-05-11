@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -19,9 +20,10 @@ public class NotificationController {
         @Autowired
         private NotificationRepo notificationRepo;
 
-        @GetMapping("/notifications/{email}")
-        public List<Notification> getNotifications(@PathVariable String email){
-            return notificationRepo.findByEmail(email);
+        @GetMapping("/api/notifications")
+        public List<Notification> getNotifications( Principal prince){
+            String Email=prince.getName();
+            return notificationRepo.findByEmail(Email);
         }
 
 }

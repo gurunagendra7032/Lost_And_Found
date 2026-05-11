@@ -7,6 +7,7 @@ import college.project.demo.Repository.LostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -27,22 +28,29 @@ public class MatchingItem {
             List<FoundItem> match=foundRepo.findByimageNameIgnoreCase(imageName);
             for(FoundItem foundItem : match) {
                 if(imageName.equalsIgnoreCase(foundItem.getImageName())){
-                    notificationService.createNotification(
-                            foundItem.getUser().getEmail(),
-                            "Possible matched item found"
-                    );break;
+
+                    if(foundItem.getUser()!=null) {
+                        notificationService.createNotification(
+                                foundItem.getUser().getEmail(),
+                                "Possible matched item found In a Found Item Table"
+                        );
+                    }
+                        break;
                 }
             }
         }
 
 
         public void FoundMatchItem(String imageName) {
+
             for (LostItem lostItem : lostrepo.findAll()) {
                 if (imageName.equalsIgnoreCase(lostItem.getImageName())) {
+                    if(lostItem.getUser()!=null){
                         notificationService.createNotification(
                                 lostItem.getUser().getEmail(),
-                                "Possible matched item found"
-                        ); break;
+                                "Possible matched item found in last Items Table "
+                        ); }
+                    break;
                     }
                 }
             }
