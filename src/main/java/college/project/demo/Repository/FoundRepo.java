@@ -14,4 +14,6 @@ public interface FoundRepo extends JpaRepository<FoundItem,Long> {
 
     List<FoundItem> findByUser(Users user);
 
+    List<FoundItem> findByImageNameContainingIgnoreCase(String keyword);
+
 }

@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(customizer->customizer.disable())
                 .authorizeHttpRequests(auth -> auth.
-                        requestMatchers("/signup","/login").permitAll()
+                        requestMatchers("/signup","/login","/admin","/admin/login").permitAll()
                         .anyRequest().authenticated()
                 );
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,5 +1,6 @@
 package college.project.demo.Repository;
 
+import college.project.demo.Entities.FoundItem;
 import college.project.demo.Entities.LostItem;
 import college.project.demo.Entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,6 @@ import java.util.List;
 public interface LostRepo extends JpaRepository<LostItem,Long> {
 
     List<LostItem> findByUser(Users user);
+
+    List<LostItem> findByImageNameContainingIgnoreCase(String keyword);
 }

@@ -4,6 +4,7 @@ import college.project.demo.Entities.FoundItem;
 import college.project.demo.Entities.Users;
 import college.project.demo.Repository.FoundRepo;
 import college.project.demo.Repository.Repo;
+import college.project.demo.Service.CustomUserDetailService;
 import college.project.demo.Service.MatchingItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,9 @@ public class FoundController {
 
     @Autowired
     private Repo repo;
+
+    @Autowired
+    private CustomUserDetailService service;
 
 
     @PostMapping("/api/save")
@@ -48,6 +52,14 @@ public class FoundController {
     @DeleteMapping("/api/deletefounditem/{id}")
     public void deleteItem(@PathVariable Long id){
         foundrepo.deleteById(id);
+    }
+
+
+    @GetMapping("/found/search")
+    public List<FoundItem> searchFound(
+            @RequestParam String keyword){
+
+        return service.searchFoundItems(keyword);
     }
 
 }

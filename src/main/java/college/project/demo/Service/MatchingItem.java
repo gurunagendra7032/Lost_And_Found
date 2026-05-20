@@ -5,6 +5,7 @@ import college.project.demo.Entities.LostItem;
 import college.project.demo.Repository.FoundRepo;
 import college.project.demo.Repository.LostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -15,6 +16,8 @@ public class MatchingItem {
 
 
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
         @Autowired
         private FoundRepo foundRepo;
 
@@ -34,6 +37,10 @@ public class MatchingItem {
                                 foundItem.getUser().getEmail(),
                                 "Possible matched item found In a Found Item Table"
                         );
+                        messagingTemplate.convertAndSend(
+                                "/topic/notifications",
+                                "Possible Match Found!"
+                        );
                     }
                         break;
                 }
@@ -49,6 +56,9 @@ public class MatchingItem {
                         notificationService.createNotification(
                                 lostItem.getUser().getEmail(),
                                 "Possible matched item found in last Items Table "
+                        );  messagingTemplate.convertAndSend(
+                                "/topic/notifications",
+                                "Possible Match Found!"
                         ); }
                     break;
                     }

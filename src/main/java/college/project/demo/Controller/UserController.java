@@ -1,6 +1,7 @@
 package college.project.demo.Controller;
 
 import college.project.demo.DTOS.SignUp;
+import college.project.demo.Entities.Role;
 import college.project.demo.Entities.Users;
 import college.project.demo.Repository.Repo;
 import college.project.demo.Service.CustomUserDetailService;
@@ -43,6 +44,29 @@ public class UserController {
         return "Register Successfully Completed";
     }
 
+    @PostMapping("/admin")
+    public String saveAdmin(@RequestBody Users user){
+        user.setRole(Role.ADMIN);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        repo.save(user);
+        return "Created Admin Successfully";
+    }
+
+    @PostMapping("/admin/login")
+    public String Adlogin(@RequestBody Users user){
+        Users users=repo.findByEmail(user.getEmail());
+        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                users.getEmail(),users.getPassword()
+        ));
+        if(authentication.isAuthenticated()){
+            return jwtService.generateToken(user);
+
+        }else{
+            throw new UsernameNotFoundException("user is Invalid");
+        }
+
+    }
+
 
     @PostMapping("/login")
     public String login(@RequestBody Users loginUser) {
@@ -53,7 +77,7 @@ public class UserController {
         ));
 
         if(authentication.isAuthenticated()){
-            return jwtService.generateToken(customUserDetailService.loadUserByUsername(loginUser.getEmail()));
+            return jwtService.generateToken(user);
 
         }else{
             throw new UsernameNotFoundException("user is Invalid");
