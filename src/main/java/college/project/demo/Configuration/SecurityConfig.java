@@ -37,7 +37,10 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(customizer->customizer.disable())
                 .authorizeHttpRequests(auth -> auth.
-                        requestMatchers("/signup","/login","/admin","/admin/login").permitAll()
+                        requestMatchers("/signup","/login","/adm/login","/ws/**")
+
+                        .permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

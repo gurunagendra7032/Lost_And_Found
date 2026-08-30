@@ -37,11 +37,11 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        Users user = repo.findByEmail(username);
-       System.out.println("First"+user);
+       System.out.println("First  "+user);
        return User.builder()
                .username(user.getEmail())
                .password(user.getPassword())
-               .authorities(user.getRole().name())
+               .roles(user.getRole().name())
                .build();
 
     }
@@ -58,16 +58,16 @@ public class CustomUserDetailService implements UserDetailsService {
         return user;
     }
 
-    public List<FoundItem> searchFoundItems(String keyword) {
+    public List<FoundItem> searchFoundItems(String keyword,Users user) {
 
         return foundrepo
-                .findByImageNameContainingIgnoreCase(keyword);
+                .findByImageNameContainingIgnoreCaseAndUser(keyword,user);
     }
 
 
-    public List<LostItem> searchlostItems(String keyword) {
+    public List<LostItem> searchlostItems(String keyword,Users user) {
 
         return lostRepo
-                .findByImageNameContainingIgnoreCase(keyword);
+                .findByImageNameContainingIgnoreCaseAndUser(keyword,user);
     }
 }

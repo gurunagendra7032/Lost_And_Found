@@ -55,7 +55,7 @@ public class MatchingItem {
                     if(lostItem.getUser()!=null){
                         notificationService.createNotification(
                                 lostItem.getUser().getEmail(),
-                                "Possible matched item found in last Items Table "
+                                "Possible matched item found in lost Items Table "
                         );  messagingTemplate.convertAndSend(
                                 "/topic/notifications",
                                 "Possible Match Found!"

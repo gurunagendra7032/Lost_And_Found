@@ -44,7 +44,7 @@ public class UserController {
         return "Register Successfully Completed";
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/adm")
     public String saveAdmin(@RequestBody Users user){
         user.setRole(Role.ADMIN);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -52,11 +52,11 @@ public class UserController {
         return "Created Admin Successfully";
     }
 
-    @PostMapping("/admin/login")
+    @PostMapping("/adm/login")
     public String Adlogin(@RequestBody Users user){
         Users users=repo.findByEmail(user.getEmail());
         Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                users.getEmail(),users.getPassword()
+                user.getEmail(),user.getPassword()
         ));
         if(authentication.isAuthenticated()){
             return jwtService.generateToken(user);

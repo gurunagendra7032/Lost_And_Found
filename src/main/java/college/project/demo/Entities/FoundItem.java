@@ -13,8 +13,29 @@ public class FoundItem {
     private String imageDescription;
     private String location;
 
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        reference = reference;
+    }
+
+    private String reference;
+
     @ManyToOne
     private Users user;
+
+    public Item_Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Item_Status status) {
+        this.status = status;
+    }
+
+    @Enumerated(EnumType.STRING)
+    private Item_Status status;
 
 
     public Users getUser() {

@@ -1,6 +1,7 @@
 package college.project.demo.Controller;
 
 import college.project.demo.Entities.FoundItem;
+import college.project.demo.Entities.Item_Status;
 import college.project.demo.Entities.Users;
 import college.project.demo.Repository.FoundRepo;
 import college.project.demo.Repository.Repo;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class FoundController {
@@ -35,6 +38,13 @@ public class FoundController {
         String name= prince.getName();
         Users user=repo.findByEmail(name);
         foundItem.setUser(user);
+        foundItem.setStatus(Item_Status.FOUND);
+        String reference = "FI-" + UUID.randomUUID()
+                .toString()
+                .substring(0, 5)
+                .toUpperCase();
+
+        foundItem.setReference(reference);
         FoundItem founditem= foundrepo.save(foundItem);
         matchingItem.FoundMatchItem(foundItem.getImageName());
         return founditem;
@@ -57,9 +67,16 @@ public class FoundController {
 
     @GetMapping("/found/search")
     public List<FoundItem> searchFound(
-            @RequestParam String keyword){
+            @RequestParam String keyword, Principal prince){
 
-        return service.searchFoundItems(keyword);
+        Users user= repo.findByEmail(prince.getName());
+
+        return service.searchFoundItems(keyword,user);
+    }
+
+    @GetMapping("/admin/getfounditems")
+    public List<FoundItem> AllgetItem(){
+        return foundrepo.findAll();
     }
 
 }

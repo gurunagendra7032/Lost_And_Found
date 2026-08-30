@@ -1,9 +1,11 @@
 package college.project.demo.Controller;
 
+import college.project.demo.Entities.FoundItem;
 import college.project.demo.Entities.LostItem;
 import college.project.demo.Entities.Users;
 import college.project.demo.Repository.LostRepo;
 import college.project.demo.Repository.Repo;
+import college.project.demo.Service.CustomUserDetailService;
 import college.project.demo.Service.MatchingItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,9 @@ public class LostController {
 
     @Autowired
     private Repo repo;
+
+    @Autowired
+    private CustomUserDetailService service;
 
     @PostMapping("/api/lostItem")
     public LostItem saveItem(@RequestBody LostItem lostItem, Principal prince) {
@@ -49,6 +54,11 @@ public class LostController {
         lostrepo.deleteById(id);
     }
 
-
+    @GetMapping("/lost/search")
+    public List<LostItem> searchFound(
+            @RequestParam String keyword,Principal prince){
+         Users user=repo.findByEmail(prince.getName());
+        return service.searchlostItems(keyword,user);
+    }
 
 }
