@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://lost-and-found-frontend-drab.vercel.app")
 public class LostController {
 
     @Autowired
