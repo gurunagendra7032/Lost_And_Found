@@ -3,6 +3,7 @@ package college.project.demo.Service;
 import college.project.demo.Entities.Notification;
 import college.project.demo.Repository.NotificationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class NotificationService {
 
       @Autowired
       private SimpMessagingTemplate messagingTemplate;
+
 
         public void createNotification(String email, String message) {
             Notification notification = new Notification();

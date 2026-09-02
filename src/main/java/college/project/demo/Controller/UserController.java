@@ -5,6 +5,7 @@ import college.project.demo.Entities.Role;
 import college.project.demo.Entities.Users;
 import college.project.demo.Repository.Repo;
 import college.project.demo.Service.CustomUserDetailService;
+import college.project.demo.Service.EmailService;
 import college.project.demo.Service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +34,9 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private EmailService emailService;
+
 
 
 
@@ -41,6 +45,11 @@ public class UserController {
         Users user = customUserDetailService.convertToEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repo.save(user);
+        emailService.sendRegistrationEmail(
+                user.getEmail(),
+                "Registration Successful"
+
+        );
         return "Register Successfully Completed";
     }
 
