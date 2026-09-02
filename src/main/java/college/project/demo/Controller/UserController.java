@@ -41,18 +41,29 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public String save(@RequestBody SignUp dto){
+    public String save(@RequestBody SignUp dto) {
+
+        System.out.println("1. SIGNUP REQUEST RECEIVED");
+
         Users user = customUserDetailService.convertToEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         repo.save(user);
+        System.out.println("2. USER SAVED TO DATABASE");
+
         try {
             emailService.sendRegistrationEmail(
                     user.getEmail(),
                     user.getName()
             );
+            System.out.println("3. EMAIL SENT SUCCESSFULLY");
         } catch (Exception e) {
-            System.out.println("Email sending failed: " + e.getMessage());
+            System.out.println("3. EMAIL FAILED");
+            e.printStackTrace();
         }
+
+        System.out.println("4. RETURNING SUCCESS RESPONSE");
+
         return "Register Successfully Completed";
     }
 
