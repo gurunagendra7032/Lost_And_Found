@@ -45,11 +45,14 @@ public class UserController {
         Users user = customUserDetailService.convertToEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         repo.save(user);
-        emailService.sendRegistrationEmail(
-                user.getEmail(),
-                "Registration Successful"
-
-        );
+        try {
+            emailService.sendRegistrationEmail(
+                    user.getEmail(),
+                    user.getName()
+            );
+        } catch (Exception e) {
+            System.out.println("Email sending failed: " + e.getMessage());
+        }
         return "Register Successfully Completed";
     }
 
