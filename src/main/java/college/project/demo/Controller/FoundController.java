@@ -43,7 +43,7 @@ public class FoundController {
                 .toString()
                 .substring(0, 5)
                 .toUpperCase();
-        System.out.println(reference);
+        System.out.println("This is theitem Reference Id "+reference);
         foundItem.setReference(reference);
         FoundItem founditem= foundrepo.save(foundItem);
         matchingItem.FoundMatchItem(foundItem.getImageName());
