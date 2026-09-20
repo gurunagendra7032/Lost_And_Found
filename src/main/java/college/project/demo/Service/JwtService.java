@@ -18,16 +18,18 @@ public class JwtService {
     private static final String SECRET="W5WbcAQIEDrSoRuaJD/ErYjE9cAXX8qbyxa64bmEEblNc0Fibo903S1coUFKG/H5hpXJOUQzNNIKRlOCXZL7Dg==";
 
 
-    public String generateToken(Users user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole());
+    public String generateToken(String email, String role) {
 
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getEmail())
+                .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + 1000 * 60 * 60)
+                )
                 .signWith(generateKey())
                 .compact();
     }

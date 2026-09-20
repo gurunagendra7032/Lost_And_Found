@@ -53,6 +53,7 @@ public class CustomUserDetailService implements UserDetailsService {
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
+        user.setCode(dto.getCode());
         user.setRole(Role.USER);
 
         return user;

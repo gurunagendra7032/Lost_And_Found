@@ -19,6 +19,8 @@ public class SignUp {
     String Email;
 
 
+
+
     public String getFirstName() {
         return FirstName;
     }

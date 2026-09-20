@@ -3,33 +3,23 @@ package college.project.demo.Entities;
 import jakarta.persistence.*;
 
 @Entity
-public class Users {
+public class Admin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
     private String email;
     private String password;
-    private String Code;
 
-    public String getCode() {
-        return Code;
+    private String registerId;
+
+    public String getRegisterId() {
+        return registerId;
     }
 
-    public void setCode(String code) {
-       this. Code = code;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
-
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
+    public void setRegisterId(String registerId) {
+       this. registerId = registerId;
     }
 
     public Role getRole() {
@@ -51,14 +41,6 @@ public class Users {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -67,15 +49,19 @@ public class Users {
         this.email = email;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Users(){
-
     }
 }

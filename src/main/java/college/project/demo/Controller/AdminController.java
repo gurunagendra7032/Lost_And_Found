@@ -1,14 +1,20 @@
 package college.project.demo.Controller;
 
-import college.project.demo.Entities.FoundItem;
-import college.project.demo.Entities.Item_Status;
-import college.project.demo.Entities.LostItem;
+import college.project.demo.Entities.*;
+import college.project.demo.Repository.AdminRepo;
 import college.project.demo.Repository.FoundRepo;
 import college.project.demo.Repository.LostRepo;
+import college.project.demo.Service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "https://lost-and-found-frontend-drab.vercel.app")
@@ -19,12 +25,57 @@ public class AdminController {
 
     @Autowired
     private LostRepo lostRepo;
+    @Autowired
+    private AdminRepo adminRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private AuthenticationManager  authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @PostMapping("/adm")
+    public Admin saveAdmin(@RequestBody Admin admin){
+        admin.setRole(Role.ADMIN);
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        String reference = "COL-" + UUID.randomUUID()
+                .toString()
+                .substring(0, 10)
+                .toUpperCase();
+        admin.setRegisterId(reference);
+       return  adminRepo.save(admin);
+
+    }
+
+    @PostMapping("/adm/login")
+    public String Adlogin(@RequestBody Admin admins){
+        Admin admin=adminRepo.findByEmail(admins.getEmail());
+        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                admin.getEmail(),admin.getPassword()
+        ));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(
+                    admin.getEmail(),
+                    "ADMIN"
+            );
+
+        }else{
+            throw new UsernameNotFoundException("user is Invalid");
+        }
+
+    }
 
 
     @GetMapping("/admin/Allfounditems")
       public long getCountItems(){
           return foundRepo.count();
       }
+
+
       @GetMapping("/admin/founditems")
       public List<FoundItem> getAllItems(){
         return foundRepo.findAll();

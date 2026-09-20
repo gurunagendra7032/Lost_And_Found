@@ -1,8 +1,10 @@
 package college.project.demo.Controller;
 
 import college.project.demo.DTOS.SignUp;
+import college.project.demo.Entities.Admin;
 import college.project.demo.Entities.Role;
 import college.project.demo.Entities.Users;
+import college.project.demo.Repository.AdminRepo;
 import college.project.demo.Repository.Repo;
 import college.project.demo.Service.CustomUserDetailService;
 import college.project.demo.Service.EmailService;
@@ -41,15 +43,28 @@ public class UserController {
     private EmailService emailService;
 
 
+    @Autowired
+    private AdminRepo adminRepo;
+
+
 
 
     @PostMapping("/signup")
     public String save(@RequestBody SignUp dto) {
 
-        System.out.println("1. SIGNUP REQUEST RECEIVED");
+
 
         Users user = customUserDetailService.convertToEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        String Id=user.getCode();
+        System.out.println("this si id ........*#&&#&#"+Id);
+        Admin admin=adminRepo.findByRegisterId(Id);
+
+        if (admin == null) {
+            throw new RuntimeException("Invalid Admin registration code");
+        }
+        user.setAdmin(admin);
 
         repo.save(user);
         System.out.println("2. USER SAVED TO DATABASE");
@@ -70,28 +85,9 @@ public class UserController {
         return "Register Successfully Completed";
     }
 
-    @PostMapping("/adm")
-    public String saveAdmin(@RequestBody Users user){
-        user.setRole(Role.ADMIN);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        repo.save(user);
-        return "Created Admin Successfully";
-    }
 
-    @PostMapping("/adm/login")
-    public String Adlogin(@RequestBody Users user){
-        Users users=repo.findByEmail(user.getEmail());
-        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                user.getEmail(),user.getPassword()
-        ));
-        if(authentication.isAuthenticated()){
-            return jwtService.generateToken(user);
 
-        }else{
-            throw new UsernameNotFoundException("user is Invalid");
-        }
 
-    }
 
 
     @PostMapping("/login")
@@ -102,8 +98,12 @@ public class UserController {
                 loginUser.getEmail(),loginUser.getPassword()
         ));
 
-        if(authentication.isAuthenticated()){
-            return jwtService.generateToken(user);
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(
+                    user.getEmail(),
+                    "USER"
+            );
+
 
         }else{
             throw new UsernameNotFoundException("user is Invalid");

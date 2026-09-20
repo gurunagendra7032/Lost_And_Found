@@ -4,6 +4,15 @@ public class SignUp {
     String name;
     String email;
     String password;
+    String Code;
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+       this. Code = code;
+    }
 
     public String getName() {
         return name;
