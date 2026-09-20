@@ -40,8 +40,8 @@ public class AdminController {
         return lostRepo.findAll();
     }
 
-      @PutMapping("admin/change/status")
-      public  String getFoundItem(@RequestParam String reference){
+      @PutMapping("/admin/{reference}/status")
+      public  String getFoundItem(@PathVariable String reference){
 
         FoundItem foundItem=foundRepo.findByReference(reference);
         foundItem.setStatus(Item_Status.WITH_ADMIN);

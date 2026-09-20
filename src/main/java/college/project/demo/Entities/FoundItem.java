@@ -12,16 +12,16 @@ public class FoundItem {
     private String imageUrl;
     private String imageDescription;
     private String location;
-
+    private String reference;
     public String getReference() {
         return reference;
     }
 
     public void setReference(String reference) {
-        reference = reference;
+        this.reference = reference;
     }
 
-    private String reference;
+
 
     @ManyToOne
     private Users user;
