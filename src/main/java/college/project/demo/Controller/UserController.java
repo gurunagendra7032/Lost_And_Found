@@ -1,5 +1,6 @@
 package college.project.demo.Controller;
 
+import college.project.demo.DTOS.Login;
 import college.project.demo.DTOS.SignUp;
 import college.project.demo.Entities.Admin;
 import college.project.demo.Entities.Role;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,8 +51,6 @@ public class UserController {
     @PostMapping("/signup")
     public String save(@RequestBody SignUp dto) {
 
-
-
         Users user = customUserDetailService.convertToEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -77,25 +77,43 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public String login(@RequestBody Users loginUser) {
-        Users user = repo.findByEmail(loginUser.getEmail());
+    public String login(@RequestBody Login loginRequest) {
 
-        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginUser.getEmail(),loginUser.getPassword()
-        ));
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
 
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(
-                    user.getEmail(),
-                    "USER"
-            );
+        // 1. Check Admin table
+        Admin admin = adminRepo.findByEmail(email);
 
+        if (admin != null) {
 
-        }else{
-            throw new UsernameNotFoundException("user is Invalid");
+            if (passwordEncoder.matches(password, admin.getPassword())) {
+                return jwtService.generateToken(
+                        admin.getEmail(),
+                        "ADMIN"
+                );
+            }
+
+            throw new BadCredentialsException("Invalid password");
         }
-    }
 
+        // 2. Check Users table
+        Users user = repo.findByEmail(email);
+
+        if (user != null) {
+
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return jwtService.generateToken(
+                        user.getEmail(),
+                        "USER"
+                );
+            }
+
+            throw new BadCredentialsException("Invalid password");
+        }
+
+        throw new UsernameNotFoundException("Account not found");
+    }
     @GetMapping("/hello")
     public String getResponse(){
         return "Hy buddy ! how Are u";
