@@ -39,9 +39,6 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private EmailService emailService;
-
 
     @Autowired
     private AdminRepo adminRepo;
@@ -69,18 +66,7 @@ public class UserController {
         repo.save(user);
         System.out.println("2. USER SAVED TO DATABASE");
 
-        try {
-            emailService.sendRegistrationEmail(
-                    user.getEmail(),
-                    user.getName()
-            );
-            System.out.println("3. EMAIL SENT SUCCESSFULLY");
-        } catch (Exception e) {
-            System.out.println("3. EMAIL FAILED");
-            e.printStackTrace();
-        }
 
-        System.out.println("4. RETURNING SUCCESS RESPONSE");
 
         return "Register Successfully Completed";
     }
