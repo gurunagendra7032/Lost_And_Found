@@ -91,13 +91,12 @@ public class AdminController {
 
       @GetMapping("/admin/founditems")
       public List<FoundItem> getAllItems(Principal prince){
-        String email=prince.getName();
-        System.out.println("this is Email "+email);
-        Admin admin= adminRepo.findByEmail(email);
-        String reference= admin.getRegisterId();
-        Users users=repo.findByCode(reference);
 
-        return foundRepo.findAllByUser(users);
+          Admin admin = adminRepo.findByEmail(prince.getName());
+
+          String reference = admin.getRegisterId();
+
+          return foundRepo.findAllByUser_Code(reference);
 
       }
 

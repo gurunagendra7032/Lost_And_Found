@@ -27,4 +27,6 @@ public interface FoundRepo extends JpaRepository<FoundItem,Long> {
 
     List<FoundItem> findByStatus(Item_Status status);
 
+    List<FoundItem> findAllByUser_Code(String code);
+
 }
