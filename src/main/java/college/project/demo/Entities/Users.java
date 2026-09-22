@@ -10,14 +10,14 @@ public class Users {
     private String name;
     private String email;
     private String password;
-    private String Code;
+    private String code;
 
     public String getCode() {
-        return Code;
+        return code;
     }
 
     public void setCode(String code) {
-       this. Code = code;
+       this. code = code;
     }
 
     @ManyToOne

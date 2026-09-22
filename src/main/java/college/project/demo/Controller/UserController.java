@@ -55,7 +55,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         String Id=user.getCode();
-        System.out.println("this si id ........*#&&#&#"+Id);
+
         Admin admin=adminRepo.findByRegisterId(Id);
 
         if (admin == null) {

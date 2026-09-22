@@ -4,14 +4,14 @@ public class SignUp {
     String name;
     String email;
     String password;
-    String Code;
+    String code;
 
     public String getCode() {
-        return Code;
+        return code;
     }
 
     public void setCode(String code) {
-       this. Code = code;
+       this. code = code;
     }
 
     public String getName() {

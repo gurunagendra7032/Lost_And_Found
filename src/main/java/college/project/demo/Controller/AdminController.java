@@ -4,6 +4,7 @@ import college.project.demo.Entities.*;
 import college.project.demo.Repository.AdminRepo;
 import college.project.demo.Repository.FoundRepo;
 import college.project.demo.Repository.LostRepo;
+import college.project.demo.Repository.Repo;
 import college.project.demo.Service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +39,9 @@ public class AdminController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private Repo repo;
 
     @PostMapping("/adm")
     public Admin saveAdmin(@RequestBody Admin admin){
@@ -77,8 +82,15 @@ public class AdminController {
 
 
       @GetMapping("/admin/founditems")
-      public List<FoundItem> getAllItems(){
-        return foundRepo.findAll();
+      public List<FoundItem> getAllItems(Principal prince){
+        String email=prince.getName();
+        System.out.println("this is Email "+email);
+        Admin admin= adminRepo.findByEmail(email);
+        String reference= admin.getRegisterId();
+        Users users=repo.findByCode(reference);
+
+        return foundRepo.findAllByUser(users);
+
       }
 
       @GetMapping("/admin/AlllostItems")

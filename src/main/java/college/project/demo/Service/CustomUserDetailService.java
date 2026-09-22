@@ -1,10 +1,8 @@
 package college.project.demo.Service;
 
 import college.project.demo.DTOS.SignUp;
-import college.project.demo.Entities.FoundItem;
-import college.project.demo.Entities.LostItem;
-import college.project.demo.Entities.Role;
-import college.project.demo.Entities.Users;
+import college.project.demo.Entities.*;
+import college.project.demo.Repository.AdminRepo;
 import college.project.demo.Repository.FoundRepo;
 import college.project.demo.Repository.LostRepo;
 import college.project.demo.Repository.Repo;
@@ -31,6 +29,9 @@ public class CustomUserDetailService implements UserDetailsService {
     @Autowired
     private LostRepo lostRepo;
 
+    @Autowired
+    private AdminRepo adminRepo;
+
 //    public Users getUserDetails(String username){
 //        return repo.findByEmail(username);
 //    }
@@ -38,11 +39,27 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        Users user = repo.findByEmail(username);
        System.out.println("First  "+user);
-       return User.builder()
-               .username(user.getEmail())
-               .password(user.getPassword())
-               .roles(user.getRole().name())
-               .build();
+       if(user!=null) {
+           return User.builder()
+                   .username(user.getEmail())
+                   .password(user.getPassword())
+                   .roles(user.getRole().name())
+                   .build();
+       }
+
+        Admin admin = adminRepo.findByEmail(username);
+
+        if (admin != null) {
+            return User.builder()
+                    .username(admin.getEmail())
+                    .password(admin.getPassword())
+                    .roles("ADMIN")
+                    .build();
+        }
+
+        throw new UsernameNotFoundException(
+                "Account not found: " + username
+        );
 
     }
 
