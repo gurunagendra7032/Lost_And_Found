@@ -76,8 +76,15 @@ public class AdminController {
 
 
     @GetMapping("/admin/Allfounditems")
-      public long getCountItems(){
-          return foundRepo.count();
+      public long getCountItems(Principal prince){
+        String email=prince.getName();
+        System.out.println("this is Email "+email);
+        Admin admin= adminRepo.findByEmail(email);
+        String reference= admin.getRegisterId();
+
+        return foundRepo.findAllByUser_Code(reference);
+
+
       }
 
 
