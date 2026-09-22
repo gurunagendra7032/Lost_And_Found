@@ -81,8 +81,9 @@ public class AdminController {
         System.out.println("this is Email "+email);
         Admin admin= adminRepo.findByEmail(email);
         String reference= admin.getRegisterId();
+        System.out.println("this reference Id "+reference);
 
-        return foundRepo.findAllByUser_Code(reference);
+        return foundRepo.countByUser_Code(reference);
 
 
       }
