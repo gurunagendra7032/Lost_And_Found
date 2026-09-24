@@ -106,8 +106,11 @@ public class AdminController {
       }
 
     @GetMapping("/admin/lostitems")
-    public List<LostItem> getAllLostItems(){
-        return lostRepo.findAll();
+    public List<LostItem> getAllLostItems(Principal prince){
+      String name= prince.getName();
+      Admin admin=adminRepo.findByEmail(name);
+        String reference = admin.getRegisterId();
+        return lostRepo.findAllByUser_Code(reference);
     }
 
       @PutMapping("/admin/{reference}/status")

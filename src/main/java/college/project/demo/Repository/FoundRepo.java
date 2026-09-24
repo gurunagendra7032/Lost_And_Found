@@ -21,7 +21,7 @@ public interface FoundRepo extends JpaRepository<FoundItem,Long> {
 
     FoundItem findByReference ( String reference);
 
-    List<FoundItem> findAllByUser(Users user);
+
 
     long countByStatus(Item_Status status);
 
