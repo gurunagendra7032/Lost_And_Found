@@ -14,5 +14,7 @@ public interface LostRepo extends JpaRepository<LostItem,Long> {
 
     List<LostItem> findAllByUser_Code(String reference);
 
+    long countByUser_Code(String reference);
+
     List<LostItem> findByImageNameContainingIgnoreCaseAndUser(String keyword,Users user);
 }

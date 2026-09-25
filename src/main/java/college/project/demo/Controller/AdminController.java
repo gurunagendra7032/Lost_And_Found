@@ -101,8 +101,10 @@ public class AdminController {
       }
 
       @GetMapping("/admin/AlllostItems")
-      public long getLostItems(){
-        return lostRepo.count();
+      public long getLostItems(Principal prince){
+        Admin admin=adminRepo.findByEmail(prince.getName());
+        String reference= admin.getRegisterId();
+         return lostRepo.countByUser_Code(reference);
       }
 
     @GetMapping("/admin/lostitems")
